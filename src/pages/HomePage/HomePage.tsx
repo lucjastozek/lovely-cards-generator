@@ -98,6 +98,7 @@ export default function HomePage(): JSX.Element {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-end",
+          width: "100%",
         }}
       >
         <Postcard
