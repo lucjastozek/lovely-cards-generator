@@ -21,6 +21,7 @@ export default function ColorPicker({
     "#da4167",
     "#e87461",
     "#050505",
+    "#fffbe6",
   ];
 
   return (
@@ -30,11 +31,11 @@ export default function ColorPicker({
         gridTemplateRows: "repeat(3, 1fr)",
         gridTemplateColumns: "repeat(5, 1fr)",
         gap: "1em",
-        height: "7.5em",
         width: "100%",
       }}
     >
       {colors.map((color, i) => {
+        const c = color === "#fffbe6" ? "#050505" : "#fffbe6";
         return (
           <div
             key={i}
@@ -44,8 +45,9 @@ export default function ColorPicker({
               justifyContent: "center",
               backgroundColor: color,
               width: "100%",
-              height: "100%",
+              height: "2em",
               border: "0.1em solid var(--font)",
+              color: c,
             }}
             aria-label={color}
             onClick={() => {

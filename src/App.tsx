@@ -10,7 +10,6 @@ function App() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        height: "100dvh",
       }}
     >
       <Navbar />

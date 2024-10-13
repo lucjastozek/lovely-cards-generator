@@ -10,7 +10,7 @@ export default function Navbar(): JSX.Element {
           alignItems: "center",
           justifyContent: "space-between",
           width: "80vw",
-          marginTop: "1.5em",
+          marginTop: "1rem",
         }}
       >
         <LogoType />

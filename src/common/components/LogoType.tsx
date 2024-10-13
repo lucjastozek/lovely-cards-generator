@@ -5,7 +5,7 @@ export default function LogoType(): JSX.Element {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <h2 style={{ marginBottom: "0.27em", marginTop: "0" }}>
         <a href="/" style={{ textDecoration: "none" }}>
-          Cringy Cards Generator
+          Lovely Cards
         </a>
       </h2>
       <Underline
