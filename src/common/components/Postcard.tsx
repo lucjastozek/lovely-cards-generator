@@ -128,7 +128,7 @@ export default function Postcard({
       mouseDragged={mouseDragged}
       mousePressed={mousePressed}
       style={{
-        border: "0.2em solid #fffbe6",
+        border: "0.2em solid var(--font)",
         height: `${h}px`,
         width: `${w}px`,
         cursor: "crosshair",

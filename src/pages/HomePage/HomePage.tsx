@@ -16,7 +16,6 @@ export default function HomePage(): JSX.Element {
         display: "flex",
         width: "80vw",
         height: "100%",
-        marginTop: "2rem",
         gap: "4rem",
         alignItems: "center",
         justifyContent: "space-between",
@@ -39,7 +38,7 @@ export default function HomePage(): JSX.Element {
               width: "100%",
             }}
           >
-            <p>Background color</p>
+            <h3>Background color</h3>
             <ColorPicker
               setColor={setBackgroundColor}
               selectedColor={backgroundColor}
@@ -53,12 +52,12 @@ export default function HomePage(): JSX.Element {
               width: "100%",
             }}
           >
-            <p>Text color</p>
+            <h3>Text color</h3>
             <ColorPicker setColor={setTextColor} selectedColor={textColor} />
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
-          <label htmlFor="author">Author</label>
+          <h3>Author</h3>
           <input
             id="author"
             value={author}
@@ -66,7 +65,7 @@ export default function HomePage(): JSX.Element {
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
-          <label htmlFor="recipient">Recipient</label>
+          <h3>Recipient</h3>
           <input
             id="recipient"
             value={recipient}
@@ -74,7 +73,7 @@ export default function HomePage(): JSX.Element {
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
-          <label htmlFor="message">Message</label>
+          <h3>Message</h3>
           <textarea
             id="message"
             value={message}
@@ -89,7 +88,7 @@ export default function HomePage(): JSX.Element {
             width: "100%",
           }}
         >
-          <p>Brush color</p>
+          <h3>Brush color</h3>
           <ColorPicker setColor={setBrushColor} selectedColor={brushColor} />
         </div>
       </div>

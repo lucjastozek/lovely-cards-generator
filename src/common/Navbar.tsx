@@ -31,23 +31,6 @@ export default function Navbar(): JSX.Element {
               }}
             />
           </a>
-          <a href="https://openprocessing.org/user/387695" target="_blank">
-            <img
-              src="/openprocessing_logo.png"
-              alt="open processing"
-              style={{
-                height: "min(2em, 2.67vw)",
-                width: "calc(min(2em, 2.67vw)*1.2)",
-              }}
-            />
-          </a>
-          <a href="https://www.linkedin.com/in/lucjastozek/" target="_blank">
-            <img
-              src="/linkedin_logo.svg"
-              alt="linked in"
-              style={{ height: "min(2em, 2.67vw)", width: "min(2em, 2.67vw)" }}
-            />
-          </a>
         </div>
       </div>
     </nav>

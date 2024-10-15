@@ -20,8 +20,8 @@ export default function ColorPicker({
     "#832232",
     "#da4167",
     "#e87461",
-    "#050505",
-    "#fffbe6",
+    "#160715",
+    "#ffffff",
   ];
 
   return (
@@ -30,12 +30,12 @@ export default function ColorPicker({
         display: "grid",
         gridTemplateRows: "repeat(3, 1fr)",
         gridTemplateColumns: "repeat(5, 1fr)",
-        gap: "1em",
+        gap: "1rem",
         width: "100%",
       }}
     >
       {colors.map((color, i) => {
-        const c = color === "#fffbe6" ? "#050505" : "#fffbe6";
+        const c = color === "#ffffff" ? "var(--bg)" : "var(--font)";
         return (
           <div
             key={i}
@@ -45,8 +45,8 @@ export default function ColorPicker({
               justifyContent: "center",
               backgroundColor: color,
               width: "100%",
-              height: "2em",
-              border: "0.1em solid var(--font)",
+              height: "2rem",
+              border: "0.1rem solid var(--font)",
               color: c,
             }}
             aria-label={color}

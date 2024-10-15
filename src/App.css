@@ -11,15 +11,14 @@
   --cherry: #832232;
   --barbie: #da4167;
   --peach: #e87461;
-  --font: #fffbe6;
-  --bg: #050505;
+  --font: #f3e9f7;
+  --bg: #160715;
+  --secondary: #8b257f;
 
   font-family: "Lato", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--font);
-  background-color: var(--bg);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -28,6 +27,10 @@
 
 h2 {
   font-weight: 400;
+}
+
+h3 {
+  margin-block: 0.1em;
 }
 
 a {
