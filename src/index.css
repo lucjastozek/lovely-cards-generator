@@ -3,5 +3,5 @@ body {
   height: 100%;
   margin: 0;
   background-color: #160715;
-  background-image: url("blobs.svg");
+  background-image: url("/public/blobs.svg");
 }
