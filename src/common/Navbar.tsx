@@ -10,6 +10,7 @@ export default function Navbar(): JSX.Element {
           alignItems: "center",
           justifyContent: "space-between",
           width: "80vw",
+          height: "100%",
           marginTop: "1rem",
         }}
       >

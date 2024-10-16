@@ -1,11 +1,13 @@
 interface ColorPickerProps {
   setColor: React.Dispatch<React.SetStateAction<string>>;
   selectedColor: string;
+  height: string;
 }
 
 export default function ColorPicker({
   setColor,
   selectedColor,
+  height,
 }: ColorPickerProps): JSX.Element {
   const colors = [
     "#d64933",
@@ -30,8 +32,9 @@ export default function ColorPicker({
         display: "grid",
         gridTemplateRows: "repeat(3, 1fr)",
         gridTemplateColumns: "repeat(5, 1fr)",
-        gap: "1rem",
-        width: "100%",
+        gap: "10% 2%",
+        width: "calc(100% - 0.2rem)",
+        height,
       }}
     >
       {colors.map((color, i) => {
@@ -45,17 +48,15 @@ export default function ColorPicker({
               justifyContent: "center",
               backgroundColor: color,
               width: "100%",
-              height: "2rem",
-              border: "0.1rem solid var(--font)",
+              height: "100%",
+              border: `0.1rem solid  ${color === selectedColor ? "var(--green1)" : "var(--font)"}`,
               color: c,
             }}
             aria-label={color}
             onClick={() => {
               setColor(color);
             }}
-          >
-            {color === selectedColor && "X"}
-          </div>
+          />
         );
       })}
     </div>

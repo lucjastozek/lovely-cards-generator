@@ -31,10 +31,10 @@ export default function Postcard({
 }: PostcardProps): JSX.Element {
   let w, h;
   if (window.innerHeight > window.innerWidth) {
-    w = window.innerWidth * 0.7;
+    w = window.innerWidth * 0.8;
     h = (w * 2) / 3;
   } else {
-    h = window.innerHeight * 0.7;
+    h = window.innerHeight * 0.8;
     w = (h * 2) / 3;
   }
 

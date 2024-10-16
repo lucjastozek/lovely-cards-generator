@@ -30,7 +30,7 @@ h2 {
 }
 
 h3 {
-  margin-block: 0.1em;
+  margin-block: 0;
 }
 
 a {
@@ -57,7 +57,7 @@ textarea {
   background-color: var(--font);
   color: var(--bg);
   border: none;
-  font-size: 1.2em;
+  font-size: 1rem;
   border-radius: 0.2em;
   font-family: "Lato", sans-serif;
 }

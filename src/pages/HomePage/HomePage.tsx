@@ -4,19 +4,27 @@ import ColorPicker from "./components/ColorPicker";
 
 export default function HomePage(): JSX.Element {
   const [backgroundColor, setBackgroundColor] = useState("#e87461");
-  const [textColor, setTextColor] = useState("#050505");
+  const [textColor, setTextColor] = useState("#160715");
   const [author, setAuthor] = useState("me");
   const [recipient, setRecipient] = useState("you");
   const [message, setMessage] = useState("i like you");
-  const [brushColor, setBrushColor] = useState("#050505");
+  const [brushColor, setBrushColor] = useState("#160715");
+  let w, h;
+  if (window.innerHeight > window.innerWidth) {
+    w = window.innerWidth * 0.8;
+    h = (w * 2) / 3;
+  } else {
+    h = window.innerHeight * 0.8;
+    w = (h * 2) / 3;
+  }
 
   return (
     <main
       style={{
         display: "flex",
         width: "80vw",
-        height: "100%",
-        gap: "4rem",
+        marginTop: "1%",
+        gap: "10%",
         alignItems: "center",
         justifyContent: "space-between",
       }}
@@ -25,8 +33,10 @@ export default function HomePage(): JSX.Element {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "2rem",
+          gap: "2vh",
           width: "100%",
+          height: `${h}px`,
+          overflowY: "auto",
         }}
       >
         <div style={{ display: "flex", gap: "2rem" }}>
@@ -42,6 +52,7 @@ export default function HomePage(): JSX.Element {
             <ColorPicker
               setColor={setBackgroundColor}
               selectedColor={backgroundColor}
+              height="8rem"
             />
           </div>
           <div
@@ -53,7 +64,11 @@ export default function HomePage(): JSX.Element {
             }}
           >
             <h3>Text color</h3>
-            <ColorPicker setColor={setTextColor} selectedColor={textColor} />
+            <ColorPicker
+              setColor={setTextColor}
+              selectedColor={textColor}
+              height="8rem"
+            />
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
@@ -78,6 +93,7 @@ export default function HomePage(): JSX.Element {
             id="message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            rows={1}
           />
         </div>
         <div
@@ -89,7 +105,11 @@ export default function HomePage(): JSX.Element {
           }}
         >
           <h3>Brush color</h3>
-          <ColorPicker setColor={setBrushColor} selectedColor={brushColor} />
+          <ColorPicker
+            setColor={setBrushColor}
+            selectedColor={brushColor}
+            height="8rem"
+          />
         </div>
       </div>
       <div
