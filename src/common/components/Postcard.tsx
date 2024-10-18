@@ -9,6 +9,7 @@ interface PostcardProps {
   author: string;
   recipient: string;
   message: string;
+  setFlexDirection: React.Dispatch<React.SetStateAction<"row" | "column">>;
 }
 
 interface Point {
@@ -28,11 +29,13 @@ export default function Postcard({
   author,
   recipient,
   message,
+  setFlexDirection,
 }: PostcardProps): JSX.Element {
   let w, h;
   if (window.innerHeight > window.innerWidth) {
     w = window.innerWidth * 0.8;
     h = (w * 2) / 3;
+    setFlexDirection("column");
   } else {
     h = window.innerHeight * 0.8;
     w = (h * 2) / 3;
@@ -73,30 +76,39 @@ export default function Postcard({
 
     if (w < h) {
       p5.textSize(p5.width * 0.1);
-    } else {
-      p5.textSize(p5.height * 0.1);
-    }
+      p5.text(`${message}`, p5.width * 0.05, p5.height * 0.05, p5.width * 0.9);
 
-    p5.text(`${message}`, p5.width * 0.05, p5.height * 0.05, p5.width * 0.9);
-
-    if (w < h) {
       p5.textSize(p5.width * 0.05);
+      p5.text(
+        `from: ${author}`,
+        p5.width * 0.05,
+        p5.height * 0.9,
+        p5.width * 0.8
+      );
+      p5.text(
+        `to: ${recipient}`,
+        p5.width * 0.05,
+        p5.height * 0.95,
+        p5.width * 0.8
+      );
     } else {
       p5.textSize(p5.height * 0.1);
-    }
+      p5.text(`${message}`, p5.width * 0.02, p5.height * 0.05, p5.width * 0.9);
 
-    p5.text(
-      `from: ${author}`,
-      p5.width * 0.05,
-      p5.height * 0.9,
-      p5.width * 0.8
-    );
-    p5.text(
-      `to: ${recipient}`,
-      p5.width * 0.05,
-      p5.height * 0.95,
-      p5.width * 0.8
-    );
+      p5.textSize(p5.height * 0.05);
+      p5.text(
+        `from: ${author}`,
+        p5.width * 0.02,
+        p5.height * 0.87,
+        p5.width * 0.8
+      );
+      p5.text(
+        `to: ${recipient}`,
+        p5.width * 0.02,
+        p5.height * 0.92,
+        p5.width * 0.8
+      );
+    }
 
     for (const drawing of drawings) {
       drawDrawing(p5, drawing);

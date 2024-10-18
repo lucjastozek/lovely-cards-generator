@@ -9,10 +9,12 @@ export default function HomePage(): JSX.Element {
   const [recipient, setRecipient] = useState("you");
   const [message, setMessage] = useState("i like you");
   const [brushColor, setBrushColor] = useState("#160715");
+  const [flexDirection, setFlexDirection] = useState<"row" | "column">("row");
+
   let w, h;
   if (window.innerHeight > window.innerWidth) {
     w = window.innerWidth * 0.8;
-    h = (w * 2) / 3;
+    h = (window.innerHeight - (w * 2) / 3) * 0.8;
   } else {
     h = window.innerHeight * 0.8;
     w = (h * 2) / 3;
@@ -22,6 +24,7 @@ export default function HomePage(): JSX.Element {
     <main
       style={{
         display: "flex",
+        flexDirection,
         width: "80vw",
         marginTop: "1%",
         gap: "10%",
@@ -38,6 +41,7 @@ export default function HomePage(): JSX.Element {
           height: `${h}px`,
           overflowY: "auto",
         }}
+        className="scrollable-element"
       >
         <div style={{ display: "flex", gap: "2rem" }}>
           <div
@@ -127,6 +131,7 @@ export default function HomePage(): JSX.Element {
           author={author}
           recipient={recipient}
           message={message}
+          setFlexDirection={setFlexDirection}
         />
       </div>
     </main>
