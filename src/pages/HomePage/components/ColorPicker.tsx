@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface ColorPickerProps {
   setColor: React.Dispatch<React.SetStateAction<string>>;
   selectedColor: string;
@@ -9,6 +11,8 @@ export default function ColorPicker({
   selectedColor,
   height,
 }: ColorPickerProps): JSX.Element {
+  const [col, setCol] = useState("#8ace00");
+
   const colors = [
     "#d64933",
     "#fa8334",
@@ -26,6 +30,10 @@ export default function ColorPicker({
     "#ffffff",
   ];
 
+  const [chosenCol, setChosenCol] = useState(
+    colors.findIndex((i) => i === selectedColor)
+  );
+
   return (
     <div
       style={{
@@ -40,25 +48,39 @@ export default function ColorPicker({
       {colors.map((color, i) => {
         const c = color === "#ffffff" ? "var(--bg)" : "var(--font)";
         return (
-          <div
+          <button
             key={i}
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               backgroundColor: color,
               width: "100%",
               height: "100%",
-              border: `0.1rem solid  ${color === selectedColor ? "var(--green1)" : "var(--font)"}`,
+              border: `0.1rem solid  ${chosenCol === i ? "var(--green1)" : "var(--font)"}`,
               color: c,
             }}
             aria-label={color}
             onClick={() => {
               setColor(color);
+              setChosenCol(i);
             }}
           />
         );
       })}
+      <input
+        type="color"
+        style={{
+          background:
+            "linear-gradient(var(--red), var(--yellow), var(--green1), var(--blue1), var(--purple1))",
+          width: "100%",
+          height: "100%",
+          border: `0.1rem solid ${chosenCol === colors.length ? "var(--green1)" : "var(--font)"}`,
+        }}
+        value={col}
+        onChange={(e) => {
+          setCol(e.target.value);
+          setColor(e.target.value);
+          setChosenCol(colors.length);
+        }}
+      />
     </div>
   );
 }

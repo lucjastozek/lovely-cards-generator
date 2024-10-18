@@ -36,6 +36,11 @@ export default function Postcard({
   } else {
     h = window.innerHeight * 0.8;
     w = (h * 2) / 3;
+
+    if (w > window.innerWidth * 0.4) {
+      w = window.innerWidth * 0.4;
+      h = (w * 3) / 2;
+    }
   }
 
   const [drawings, setDrawings] = useState<Drawing[]>([]);
