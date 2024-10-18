@@ -38,7 +38,7 @@ export default function HomePage(): JSX.Element {
           flexDirection: "column",
           gap: "2vh",
           width: "100%",
-          height: `${h}px`,
+          height: `calc(${h}px - 2.7em)`,
           overflowY: "auto",
         }}
         className="scrollable-element"

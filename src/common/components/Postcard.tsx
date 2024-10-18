@@ -1,6 +1,6 @@
 import Sketch from "react-p5";
 import P5 from "p5";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface PostcardProps {
   backgroundColor: string;
@@ -32,9 +32,12 @@ export default function Postcard({
   setFlexDirection,
 }: PostcardProps): JSX.Element {
   let w, h;
+  const p5Ref = useRef<P5 | null>(null);
+
   if (window.innerHeight > window.innerWidth) {
     w = window.innerWidth * 0.8;
-    h = (w * 2) / 3;
+    h = (w * 2) / 3 - 20;
+
     setFlexDirection("column");
   } else {
     h = window.innerHeight * 0.8;
@@ -51,6 +54,7 @@ export default function Postcard({
   const setup = (p5: P5, canvasParentRef: Element) => {
     p5.createCanvas(w, h).parent(canvasParentRef);
     p5.frameRate(200);
+    p5Ref.current = p5;
   };
 
   const drawDrawing = (p5: P5, drawing: Drawing) => {
@@ -139,18 +143,48 @@ export default function Postcard({
     ]);
   };
 
+  const formatDate = () => {
+    const now = new Date();
+    return now
+      .toLocaleString("en-GB")
+      .replace(/[:/, ]/g, "-")
+      .slice(0, -3);
+  };
+
+  const downloadCard = () => {
+    const p5 = p5Ref.current;
+
+    if (p5) {
+      p5.saveCanvas(`Lovely_card_${formatDate()}`, "jpg");
+    }
+  };
+
   return (
-    <Sketch
-      setup={setup}
-      draw={draw}
-      mouseDragged={mouseDragged}
-      mousePressed={mousePressed}
+    <div
       style={{
-        border: "0.2em solid var(--font)",
-        height: `${h}px`,
-        width: `${w}px`,
-        cursor: "crosshair",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.5em",
       }}
-    />
+    >
+      <Sketch
+        setup={setup}
+        draw={draw}
+        mouseDragged={mouseDragged}
+        mousePressed={mousePressed}
+        style={{
+          border: "0.2em solid var(--font)",
+          height: `${h}px`,
+          width: `${w}px`,
+          cursor: "crosshair",
+        }}
+      />
+      <button
+        style={{ backgroundColor: "var(--blue1)" }}
+        onClick={downloadCard}
+      >
+        Download
+      </button>
+    </div>
   );
 }
