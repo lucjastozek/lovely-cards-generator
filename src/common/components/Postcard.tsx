@@ -50,6 +50,7 @@ export default function Postcard({
 
   const setup = (p5: P5, canvasParentRef: Element) => {
     p5.createCanvas(w, h).parent(canvasParentRef);
+    p5.frameRate(200);
   };
 
   const drawDrawing = (p5: P5, drawing: Drawing) => {
