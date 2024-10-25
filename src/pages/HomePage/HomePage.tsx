@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Postcard from "../../common/components/Postcard";
 import ColorPicker from "./components/ColorPicker";
 
@@ -10,15 +10,24 @@ export default function HomePage(): JSX.Element {
   const [message, setMessage] = useState("i like you");
   const [brushColor, setBrushColor] = useState("#160715");
   const [flexDirection, setFlexDirection] = useState<"row" | "column">("row");
+  const [postcard, setPostcard] = useState<HTMLElement | null>(null);
+  const [nav, setNav] = useState<HTMLElement | null>(null);
+  const [h, setH] = useState(window.innerHeight);
 
-  let w, h;
-  if (window.innerHeight > window.innerWidth) {
-    w = window.innerWidth * 0.8;
-    h = (window.innerHeight - (w * 2) / 3) * 0.8;
-  } else {
-    h = window.innerHeight * 0.8;
-    w = (h * 2) / 3;
-  }
+  useEffect(() => {
+    setPostcard(document.querySelector("#postcard-container") as HTMLElement);
+    setNav(document.querySelector("nav") as HTMLElement);
+
+    const height = postcard?.offsetHeight
+      ? nav?.offsetHeight
+        ? window.innerHeight - postcard.offsetHeight - nav.offsetHeight
+        : window.innerHeight - postcard.offsetHeight
+      : window.innerHeight;
+
+    setH(height);
+
+    console.log(h);
+  }, [postcard, h, nav]);
 
   return (
     <main
@@ -27,9 +36,9 @@ export default function HomePage(): JSX.Element {
         flexDirection,
         width: "80vw",
         marginTop: "1%",
-        gap: "10%",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: "2rem",
       }}
     >
       <div
@@ -38,17 +47,19 @@ export default function HomePage(): JSX.Element {
           flexDirection: "column",
           gap: "2vh",
           width: "100%",
-          height: `calc(${h}px - 2.7em)`,
+          height:
+            window.innerHeight > window.innerWidth
+              ? `calc(${h}px - 3rem - 3dvh)`
+              : "100%",
           overflowY: "auto",
         }}
-        className="scrollable-element"
       >
         <div style={{ display: "flex", gap: "2rem" }}>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "0.5em",
+              gap: "0.5rem",
               width: "100%",
             }}
           >
@@ -56,26 +67,23 @@ export default function HomePage(): JSX.Element {
             <ColorPicker
               setColor={setBackgroundColor}
               selectedColor={backgroundColor}
-              height="8rem"
             />
           </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "0.5em",
+              gap: "0.5rem",
               width: "100%",
             }}
           >
             <h3>Text color</h3>
-            <ColorPicker
-              setColor={setTextColor}
-              selectedColor={textColor}
-              height="8rem"
-            />
+            <ColorPicker setColor={setTextColor} selectedColor={textColor} />
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+        >
           <h3>Author</h3>
           <input
             id="author"
@@ -83,7 +91,9 @@ export default function HomePage(): JSX.Element {
             onChange={(e) => setAuthor(e.target.value)}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+        >
           <h3>Recipient</h3>
           <input
             id="recipient"
@@ -91,7 +101,9 @@ export default function HomePage(): JSX.Element {
             onChange={(e) => setRecipient(e.target.value)}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+        >
           <h3>Message</h3>
           <textarea
             id="message"
@@ -104,36 +116,24 @@ export default function HomePage(): JSX.Element {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "0.5em",
+            gap: "0.5rem",
             width: "100%",
           }}
         >
           <h3>Brush color</h3>
-          <ColorPicker
-            setColor={setBrushColor}
-            selectedColor={brushColor}
-            height="8rem"
-          />
+          <ColorPicker setColor={setBrushColor} selectedColor={brushColor} />
         </div>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          width: "100%",
-        }}
-      >
-        <Postcard
-          backgroundColor={backgroundColor}
-          textColor={textColor}
-          brushColor={brushColor}
-          author={author}
-          recipient={recipient}
-          message={message}
-          setFlexDirection={setFlexDirection}
-        />
-      </div>
+
+      <Postcard
+        backgroundColor={backgroundColor}
+        textColor={textColor}
+        brushColor={brushColor}
+        author={author}
+        recipient={recipient}
+        message={message}
+        setFlexDirection={setFlexDirection}
+      />
     </main>
   );
 }

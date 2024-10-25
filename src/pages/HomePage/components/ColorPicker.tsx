@@ -3,13 +3,11 @@ import { useState } from "react";
 interface ColorPickerProps {
   setColor: React.Dispatch<React.SetStateAction<string>>;
   selectedColor: string;
-  height: string;
 }
 
 export default function ColorPicker({
   setColor,
   selectedColor,
-  height,
 }: ColorPickerProps): JSX.Element {
   const [col, setCol] = useState("#8ace00");
 
@@ -35,16 +33,7 @@ export default function ColorPicker({
   );
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateRows: "repeat(3, 1fr)",
-        gridTemplateColumns: "repeat(5, 1fr)",
-        gap: "10% 2%",
-        width: "calc(100% - 0.2rem)",
-        height,
-      }}
-    >
+    <div className="button-grid">
       {colors.map((color, i) => {
         const c = color === "#ffffff" ? "var(--bg)" : "var(--font)";
         return (
@@ -52,8 +41,6 @@ export default function ColorPicker({
             key={i}
             style={{
               backgroundColor: color,
-              width: "100%",
-              height: "100%",
               border: `0.1rem solid  ${chosenCol === i ? "var(--green1)" : "var(--font)"}`,
               color: c,
             }}
@@ -62,6 +49,7 @@ export default function ColorPicker({
               setColor(color);
               setChosenCol(i);
             }}
+            className="color-button"
           />
         );
       })}

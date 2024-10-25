@@ -164,8 +164,9 @@ export default function Postcard({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "0.5em",
+        gap: "0.5rem",
       }}
+      id="postcard-container"
     >
       <Sketch
         setup={setup}
@@ -173,7 +174,7 @@ export default function Postcard({
         mouseDragged={mouseDragged}
         mousePressed={mousePressed}
         style={{
-          border: "0.2em solid var(--font)",
+          border: "0.2rem solid var(--font)",
           height: `${h}px`,
           width: `${w}px`,
           cursor: "crosshair",
