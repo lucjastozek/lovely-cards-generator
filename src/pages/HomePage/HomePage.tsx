@@ -1,142 +1,163 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Postcard from "../../common/components/Postcard";
 import ColorPicker from "./components/ColorPicker";
+import "./HomePage.css";
+import {
+  PictureFrame,
+  User,
+  Text,
+  Lovely,
+  MessageFavorite,
+  Brush2,
+} from "iconsax-reactjs";
 
 export default function HomePage(): JSX.Element {
-  const [backgroundColor, setBackgroundColor] = useState("#e87461");
-  const [textColor, setTextColor] = useState("#160715");
+  const lightPalette: Record<string, `#${string}`> = {
+    Cream: "#fffbe6",
+    White: "#ffffff",
+    Coral: "#EE7563",
+    Orange: "#EA8644",
+    Yellow: "#EBCD47",
+    "Light Green": "#56C876",
+    Green: "#4FB561",
+    "Sky Blue": "#6DC5E2",
+    Teal: "#3AC2DE",
+    Lavender: "#A990B6",
+    Purple: "#B186D5",
+    Rose: "#DE7C8E",
+    Pink: "#E47792",
+    Peach: "#E97967",
+  };
+
+  const darkPalette: Record<string, `#${string}`> = {
+    "Dark Gray": "#272727",
+    Black: "#050505",
+    "Dark Red": "#992F1E",
+    Brown: "#913C03",
+    Olive: "#6F5006",
+    "Forest Green": "#205B33",
+    "Dark Green": "#14591D",
+    Navy: "#0F5A76",
+    "Dark Teal": "#1F4E61",
+    Eggplant: "#644E6E",
+    "Dark Purple": "#573280",
+    Maroon: "#832232",
+    Burgundy: "#891F40",
+    "Dark Orange": "#893E2F",
+  };
+
+  const [backgroundColor, setBackgroundColor] = useState(
+    Object.values(darkPalette)[0]
+  );
+  const [textColor, setTextColor] = useState(Object.values(lightPalette)[0]);
   const [author, setAuthor] = useState("me");
   const [recipient, setRecipient] = useState("you");
   const [message, setMessage] = useState("i like you");
-  const [brushColor, setBrushColor] = useState("#160715");
+  const [brushColor, setBrushColor] = useState(Object.values(lightPalette)[0]);
   const [flexDirection, setFlexDirection] = useState<"row" | "column">("row");
-  const [postcard, setPostcard] = useState<HTMLElement | null>(null);
-  const [nav, setNav] = useState<HTMLElement | null>(null);
-  const [h, setH] = useState(window.innerHeight);
-
-  useEffect(() => {
-    setPostcard(document.querySelector("#postcard-container") as HTMLElement);
-    setNav(document.querySelector("nav") as HTMLElement);
-
-    const height = postcard?.offsetHeight
-      ? nav?.offsetHeight
-        ? window.innerHeight - postcard.offsetHeight - nav.offsetHeight
-        : window.innerHeight - postcard.offsetHeight
-      : window.innerHeight;
-
-    setH(height);
-
-    console.log(h);
-  }, [postcard, h, nav]);
 
   return (
-    <main
-      style={{
-        display: "flex",
-        flexDirection,
-        width: "80vw",
-        marginTop: "1%",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: "2rem",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "2vh",
-          width: "100%",
-          height:
-            window.innerHeight > window.innerWidth
-              ? `calc(${h}px - 3rem - 3dvh)`
-              : "100%",
-          overflowY: "auto",
-        }}
-      >
-        <div style={{ display: "flex", gap: "2rem" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              width: "100%",
-            }}
-          >
-            <h3>Background color</h3>
-            <ColorPicker
-              setColor={setBackgroundColor}
-              selectedColor={backgroundColor}
-            />
+    <main className="homepage-container" style={{ flexDirection }}>
+      <div className="controls-panel">
+        <div className="color-controls-row">
+          <div className="color-control-item">
+            <div className="control-group">
+              <h3 data-control="background">
+                <PictureFrame color="var(--font)" />
+                Background color
+              </h3>
+              <ColorPicker
+                setColor={setBackgroundColor}
+                selectedColor={backgroundColor}
+                palette={darkPalette}
+              />
+            </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              width: "100%",
-            }}
-          >
-            <h3>Text color</h3>
-            <ColorPicker setColor={setTextColor} selectedColor={textColor} />
+          <div className="color-control-item">
+            <div className="control-group">
+              <h3 data-control="text">
+                <Text color="var(--font)" />
+                Text color
+              </h3>
+              <ColorPicker
+                setColor={setTextColor}
+                selectedColor={textColor}
+                palette={lightPalette}
+              />
+            </div>
           </div>
         </div>
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-        >
-          <h3>Author</h3>
+
+        <div className="control-group">
+          <h3 data-control="author">
+            <User color="var(--font)" />
+            Author
+          </h3>
           <input
             id="author"
+            className="enhanced-input"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            aria-label="author"
+            aria-label="Who is sending this postcard?"
+            placeholder="Your name..."
           />
         </div>
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-        >
-          <h3>Recipient</h3>
+
+        <div className="control-group">
+          <h3 data-control="recipient">
+            <Lovely color="var(--font)" />
+            Recipient
+          </h3>
           <input
             id="recipient"
+            className="enhanced-input"
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
-            aria-label="recipient"
+            aria-label="Who is receiving this postcard?"
+            placeholder="Their name..."
           />
         </div>
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-        >
-          <h3>Message</h3>
+
+        <div className="control-group">
+          <h3 data-control="message">
+            <MessageFavorite color="var(--font)" />
+            Message
+          </h3>
           <textarea
             id="message"
+            className="enhanced-input enhanced-textarea"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            rows={1}
-            aria-label="message"
+            rows={2}
+            aria-label="Your heartfelt message"
+            placeholder="Write something sweet..."
           />
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-            width: "100%",
-          }}
-        >
-          <h3>Brush color</h3>
-          <ColorPicker setColor={setBrushColor} selectedColor={brushColor} />
+
+        <div className="control-group">
+          <h3 data-control="brush">
+            <Brush2 color="var(--font)" />
+            Brush color
+          </h3>
+          <ColorPicker
+            setColor={setBrushColor}
+            selectedColor={brushColor}
+            palette={lightPalette}
+          />
         </div>
       </div>
 
-      <Postcard
-        backgroundColor={backgroundColor}
-        textColor={textColor}
-        brushColor={brushColor}
-        author={author}
-        recipient={recipient}
-        message={message}
-        setFlexDirection={setFlexDirection}
-      />
+      <div className="postcard-section">
+        <Postcard
+          backgroundColor={backgroundColor}
+          textColor={textColor}
+          brushColor={brushColor}
+          author={author}
+          recipient={recipient}
+          message={message}
+          setFlexDirection={setFlexDirection}
+        />
+      </div>
     </main>
   );
 }

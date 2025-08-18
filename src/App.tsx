@@ -9,8 +9,9 @@ function App() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "100dvh",
-        gap: "1dvh",
+        height: "100vh",
+        width: "100vw",
+        overflow: "hidden",
       }}
     >
       <Navbar />
