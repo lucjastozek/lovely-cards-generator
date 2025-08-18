@@ -8,8 +8,17 @@ export default function LogoType(): JSX.Element {
           fontFamily: "'Pacifico', cursive",
         }}
       >
-        <a href="/" style={{ textDecoration: "none" }}>
-          Lovely Cards 🩷
+        <a
+          href="/"
+          style={{
+            textDecoration: "none",
+            display: "flex",
+            justifyContent: "center",
+            gap: "0.5rem",
+          }}
+        >
+          Lovely Cards{" "}
+          <img src="/lovelyCardsIcon.svg" alt="Lovely Cards logo" />
         </a>
       </h2>
     </div>

@@ -1,74 +1,63 @@
 import { useState } from "react";
+import "./ColorPicker.css";
 
 interface ColorPickerProps {
-  setColor: React.Dispatch<React.SetStateAction<string>>;
+  setColor: React.Dispatch<React.SetStateAction<`#${string}`>>;
   selectedColor: string;
+  palette: Record<string, `#${string}`>;
 }
 
 export default function ColorPicker({
   setColor,
   selectedColor,
+  palette,
 }: ColorPickerProps): JSX.Element {
-  const [col, setCol] = useState("#8ace00");
+  const [customColor, setCustomColor] = useState("#8ace00");
 
-  const colors = [
-    "#d64933",
-    "#fa8334",
-    "#ea9010",
-    "#56c876",
-    "#4fb561",
-    "#6dc5e2",
-    "#23b5d3",
-    "#a288b1",
-    "#8c4dc0",
-    "#832232",
-    "#da4167",
-    "#e87461",
-    "#160715",
-    "#ffffff",
-  ];
+  const colors = Object.values(palette);
 
-  const [chosenCol, setChosenCol] = useState(
-    colors.findIndex((i) => i === selectedColor)
+  const getColorName = (hexColor: string): string => {
+    const entry = Object.entries(palette).find(([, hex]) => hex === hexColor);
+    return entry ? entry[0] : hexColor;
+  };
+
+  const [chosenIndex, setChosenIndex] = useState(
+    colors.findIndex((color) => color === selectedColor)
   );
 
+  const isCustomSelected = chosenIndex === -1;
+
   return (
-    <div className="button-grid">
-      {colors.map((color, i) => {
-        const c = color === "#ffffff" ? "var(--bg)" : "var(--font)";
-        return (
+    <div className="enhanced-color-picker">
+      <div className="color-grid">
+        {colors.map((color, index) => (
           <button
-            key={i}
-            style={{
-              backgroundColor: color,
-              border: `0.1rem solid  ${chosenCol === i ? "var(--green1)" : "var(--font)"}`,
-              color: c,
-            }}
-            aria-label={color}
+            key={color}
+            className={`color-button-enhanced ${chosenIndex === index ? "selected" : ""} ${colors[0] === "#fffbe6" ? "light" : "dark"}`}
+            style={{ backgroundColor: color }}
+            aria-label={`Select ${getColorName(color)} color`}
+            title={getColorName(color)}
             onClick={() => {
               setColor(color);
-              setChosenCol(i);
+              setChosenIndex(index);
             }}
-            className="color-button"
           />
-        );
-      })}
-      <input
-        type="color"
-        style={{
-          background:
-            "linear-gradient(var(--red), var(--yellow), var(--green1), var(--blue1), var(--purple1))",
-          width: "100%",
-          height: "100%",
-          border: `0.1rem solid ${chosenCol === colors.length ? "var(--green1)" : "var(--font)"}`,
-        }}
-        value={col}
-        onChange={(e) => {
-          setCol(e.target.value);
-          setColor(e.target.value);
-          setChosenCol(colors.length);
-        }}
-      />
+        ))}
+
+        <input
+          type="color"
+          className={`custom-color-input ${isCustomSelected ? "selected" : ""}`}
+          value={customColor}
+          onChange={(e) => {
+            const newColor = e.target.value as `#${string}`;
+            setCustomColor(newColor);
+            setColor(newColor);
+            setChosenIndex(-1);
+          }}
+          aria-label="Choose a custom color"
+          title="Custom color picker"
+        />
+      </div>
     </div>
   );
 }

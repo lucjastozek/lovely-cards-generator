@@ -1,0 +1,359 @@
+.homepage-container {
+  display: flex;
+  width: 100%;
+  height: calc(100dvh - 80px);
+  max-width: 100vw;
+  padding: 1rem;
+  gap: 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 350px;
+  min-width: 350px;
+  padding: 1rem;
+  background-color: rgba(22, 7, 21, 0.8);
+  border-radius: 1rem;
+  border: 2px solid rgba(243, 233, 247, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(22, 7, 21, 0.3);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.more-options-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.6rem;
+  background: rgba(243, 233, 247, 0.1);
+  border: 1px solid rgba(243, 233, 247, 0.2);
+  border-radius: 0.6rem;
+  color: var(--font);
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: "Lato", sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.more-options-toggle:hover {
+  background: rgba(243, 233, 247, 0.2);
+  border-color: rgba(243, 233, 247, 0.4);
+  transform: translateY(-1px);
+}
+
+.more-options-toggle:active {
+  transform: translateY(0);
+}
+
+.more-options-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.more-options-content.closed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  overflow: hidden;
+}
+
+.more-options-content.open {
+  max-height: 1000px;
+  opacity: 1;
+  margin-top: 0;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.control-group h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--font);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-5deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(5deg) scale(1.1);
+  }
+}
+
+.enhanced-input {
+  background: rgba(243, 233, 247, 0.95);
+  color: var(--bg);
+  border: 2px solid transparent;
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  font-family: "Lato", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(22, 7, 21, 0.1);
+}
+
+.enhanced-input:focus {
+  outline: none;
+  border-color: var(--peach);
+  background: var(--font);
+  box-shadow: 0 4px 16px rgba(232, 116, 97, 0.3);
+  transform: translateY(-1px);
+}
+
+.enhanced-input:hover {
+  background: var(--font);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22, 7, 21, 0.15);
+}
+
+.enhanced-input::placeholder {
+  color: rgba(22, 7, 21, 0.6);
+  font-style: italic;
+}
+
+.enhanced-textarea {
+  resize: vertical;
+  min-height: 2rem;
+  max-height: 4rem;
+}
+
+.color-controls-row {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.color-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 140px;
+  flex: 1;
+}
+
+.postcard-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(22, 7, 21, 0.8);
+  border-radius: 1rem;
+  border: 2px solid rgba(243, 233, 247, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(22, 7, 21, 0.3);
+}
+
+@media (orientation: portrait) {
+  .homepage-container {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    height: 100dvh;
+    overflow: hidden;
+    align-items: center;
+    position: relative;
+  }
+
+  .controls-panel {
+    width: calc(100vw - 3rem);
+    min-width: 0;
+    max-height: 40dvh;
+    padding: 0.75rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+    transition: all 0.3s ease;
+  }
+
+  .controls-panel.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    max-height: 100dvh;
+    height: 100dvh;
+    z-index: 1000;
+    box-shadow: 0 16px 64px rgba(22, 7, 21, 0.6);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.5rem;
+    padding-bottom: 2rem;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .controls-panel.expanded .more-options-content.open {
+    max-height: none;
+    padding-bottom: 1rem;
+  }
+
+  .controls-panel.expanded .control-group:last-child {
+    margin-bottom: 1rem;
+  }
+
+  .close-button {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--darkRed);
+    border: 2px solid rgba(243, 233, 247, 0.3);
+    border-radius: 50%;
+    color: var(--font);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(22, 7, 21, 0.4);
+    z-index: 1001;
+    transform: translateZ(0);
+  }
+
+  .close-button:active {
+    transform: scale(0.95);
+  }
+
+  .postcard-section {
+    flex: 1;
+    min-height: 0;
+    width: calc(100vw - 3rem);
+    min-width: 0;
+    padding: 0.75rem;
+  }
+
+  .more-options-toggle {
+    display: flex;
+  }
+
+  .color-controls-row {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .color-control-item {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .enhanced-input {
+    font-size: 16px;
+  }
+
+  .enhanced-textarea {
+    font-size: 16px;
+  }
+
+  .postcard-container {
+    width: 100%;
+  }
+}
+
+@media (orientation: landscape) {
+  .more-options-toggle {
+    display: none;
+  }
+
+  .more-options-content {
+    max-height: none !important;
+    opacity: 1 !important;
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-container {
+    padding: 0.25rem;
+    gap: 0.5rem;
+  }
+
+  .controls-panel {
+    padding: 0.5rem;
+    max-height: 35dvh;
+  }
+
+  .controls-panel.expanded {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .postcard-section {
+    padding: 0.5rem;
+  }
+
+  .more-options-toggle {
+    display: flex;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .control-group h3 {
+    font-size: 0.85rem;
+  }
+
+  .enhanced-input {
+    padding: 0.5rem;
+    font-size: 16px;
+  }
+
+  .enhanced-textarea {
+    padding: 0.5rem;
+    font-size: 16px;
+  }
+
+  .close-button {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.controls-panel *:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enhanced-input,
+  .control-group h3::before {
+    transition: none;
+    animation: none;
+  }
+}

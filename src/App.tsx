@@ -10,7 +10,8 @@ function App() {
         flexDirection: "column",
         alignItems: "center",
         height: "100dvh",
-        gap: "1dvh",
+        width: "100vw",
+        overflow: "hidden",
       }}
     >
       <Navbar />
