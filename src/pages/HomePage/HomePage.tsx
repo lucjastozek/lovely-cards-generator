@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Postcard from "../../common/components/Postcard";
 import ColorPicker from "./components/ColorPicker";
 import "./HomePage.css";
@@ -9,6 +9,8 @@ import {
   Lovely,
   MessageFavorite,
   Brush2,
+  ArrowDown2,
+  ArrowUp2,
 } from "iconsax-reactjs";
 
 export default function HomePage(): JSX.Element {
@@ -55,85 +57,28 @@ export default function HomePage(): JSX.Element {
   const [message, setMessage] = useState("i like you");
   const [brushColor, setBrushColor] = useState(Object.values(lightPalette)[0]);
   const [flexDirection, setFlexDirection] = useState<"row" | "column">("row");
+  const [isMoreOptionsOpen, setIsMoreOptionsOpen] = useState(false);
+  const [isPortrait, setIsPortrait] = useState(false);
+
+  useEffect(() => {
+    const checkOrientation = () => {
+      const portrait = window.innerHeight > window.innerWidth;
+      setIsPortrait(portrait);
+      if (!portrait) {
+        setIsMoreOptionsOpen(true);
+      }
+    };
+
+    checkOrientation();
+
+    window.addEventListener("resize", checkOrientation);
+
+    return () => window.removeEventListener("resize", checkOrientation);
+  }, []);
 
   return (
     <main className="homepage-container" style={{ flexDirection }}>
       <div className="controls-panel">
-        <div className="color-controls-row">
-          <div className="color-control-item">
-            <div className="control-group">
-              <h3 data-control="background">
-                <PictureFrame color="var(--font)" />
-                Background color
-              </h3>
-              <ColorPicker
-                setColor={setBackgroundColor}
-                selectedColor={backgroundColor}
-                palette={darkPalette}
-              />
-            </div>
-          </div>
-          <div className="color-control-item">
-            <div className="control-group">
-              <h3 data-control="text">
-                <Text color="var(--font)" />
-                Text color
-              </h3>
-              <ColorPicker
-                setColor={setTextColor}
-                selectedColor={textColor}
-                palette={lightPalette}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="control-group">
-          <h3 data-control="author">
-            <User color="var(--font)" />
-            Author
-          </h3>
-          <input
-            id="author"
-            className="enhanced-input"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            aria-label="Who is sending this postcard?"
-            placeholder="Your name..."
-          />
-        </div>
-
-        <div className="control-group">
-          <h3 data-control="recipient">
-            <Lovely color="var(--font)" />
-            Recipient
-          </h3>
-          <input
-            id="recipient"
-            className="enhanced-input"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
-            aria-label="Who is receiving this postcard?"
-            placeholder="Their name..."
-          />
-        </div>
-
-        <div className="control-group">
-          <h3 data-control="message">
-            <MessageFavorite color="var(--font)" />
-            Message
-          </h3>
-          <textarea
-            id="message"
-            className="enhanced-input enhanced-textarea"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            rows={2}
-            aria-label="Your heartfelt message"
-            placeholder="Write something sweet..."
-          />
-        </div>
-
         <div className="control-group">
           <h3 data-control="brush">
             <Brush2 color="var(--font)" />
@@ -144,6 +89,101 @@ export default function HomePage(): JSX.Element {
             selectedColor={brushColor}
             palette={lightPalette}
           />
+        </div>
+        {isPortrait && (
+          <button
+            className="more-options-toggle"
+            onClick={() => setIsMoreOptionsOpen(!isMoreOptionsOpen)}
+            aria-label={
+              isMoreOptionsOpen ? "Hide more options" : "Show more options"
+            }
+          >
+            <span>More Options</span>
+            {isMoreOptionsOpen ? (
+              <ArrowUp2 size={18} color="var(--font)" />
+            ) : (
+              <ArrowDown2 size={18} color="var(--font)" />
+            )}
+          </button>
+        )}
+
+        <div
+          className={`more-options-content ${isMoreOptionsOpen ? "open" : "closed"}`}
+        >
+          <div className="color-controls-row">
+            <div className="color-control-item">
+              <div className="control-group">
+                <h3 data-control="background">
+                  <PictureFrame color="var(--font)" />
+                  Background color
+                </h3>
+                <ColorPicker
+                  setColor={setBackgroundColor}
+                  selectedColor={backgroundColor}
+                  palette={darkPalette}
+                />
+              </div>
+            </div>
+            <div className="color-control-item">
+              <div className="control-group">
+                <h3 data-control="text">
+                  <Text color="var(--font)" />
+                  Text color
+                </h3>
+                <ColorPicker
+                  setColor={setTextColor}
+                  selectedColor={textColor}
+                  palette={lightPalette}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="control-group">
+            <h3 data-control="author">
+              <User color="var(--font)" />
+              Author
+            </h3>
+            <input
+              id="author"
+              className="enhanced-input"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              aria-label="Who is sending this postcard?"
+              placeholder="Your name..."
+            />
+          </div>
+
+          <div className="control-group">
+            <h3 data-control="recipient">
+              <Lovely color="var(--font)" />
+              Recipient
+            </h3>
+            <input
+              id="recipient"
+              className="enhanced-input"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+              aria-label="Who is receiving this postcard?"
+              placeholder="Their name..."
+            />
+          </div>
+
+          <div className="control-group">
+            <h3 data-control="message">
+              <MessageFavorite color="var(--font)" />
+              Message
+            </h3>
+            <textarea
+              id="message"
+              className="enhanced-input enhanced-textarea"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={2}
+              aria-label="Your heartfelt message"
+              placeholder="Write something sweet..."
+            />
+          </div>
         </div>
       </div>
 
