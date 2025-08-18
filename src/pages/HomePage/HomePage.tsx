@@ -10,7 +10,7 @@ import {
   MessageFavorite,
   Brush2,
   ArrowDown2,
-  ArrowUp2,
+  CloseSquare,
 } from "iconsax-reactjs";
 
 export default function HomePage(): JSX.Element {
@@ -78,7 +78,19 @@ export default function HomePage(): JSX.Element {
 
   return (
     <main className="homepage-container" style={{ flexDirection }}>
-      <div className="controls-panel">
+      {isPortrait && isMoreOptionsOpen && (
+        <button
+          className="close-button"
+          onClick={() => setIsMoreOptionsOpen(false)}
+          aria-label="Close options"
+        >
+          <CloseSquare size={24} color="var(--font)" />
+        </button>
+      )}
+
+      <div
+        className={`controls-panel ${isPortrait && isMoreOptionsOpen ? "expanded" : ""}`}
+      >
         <div className="control-group">
           <h3 data-control="brush">
             <Brush2 color="var(--font)" />
@@ -90,20 +102,14 @@ export default function HomePage(): JSX.Element {
             palette={lightPalette}
           />
         </div>
-        {isPortrait && (
+        {isPortrait && !isMoreOptionsOpen && (
           <button
             className="more-options-toggle"
             onClick={() => setIsMoreOptionsOpen(!isMoreOptionsOpen)}
-            aria-label={
-              isMoreOptionsOpen ? "Hide more options" : "Show more options"
-            }
+            aria-label="Show more options"
           >
             <span>More Options</span>
-            {isMoreOptionsOpen ? (
-              <ArrowUp2 size={18} color="var(--font)" />
-            ) : (
-              <ArrowDown2 size={18} color="var(--font)" />
-            )}
+            <ArrowDown2 size={18} color="var(--font)" />
           </button>
         )}
 
