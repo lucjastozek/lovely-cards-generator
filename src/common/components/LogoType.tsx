@@ -17,7 +17,8 @@ export default function LogoType(): JSX.Element {
             gap: "0.5rem",
           }}
         >
-          Lovely Cards <img src="/lovelyCardsIcon.svg" />
+          Lovely Cards{" "}
+          <img src="/lovelyCardsIcon.svg" alt="Lovely Cards logo" />
         </a>
       </h2>
     </div>

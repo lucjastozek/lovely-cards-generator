@@ -179,10 +179,6 @@ export default function Postcard({
     ctx.stroke();
   };
 
-  useEffect(() => {
-    drawCanvas();
-  }, [drawCanvas]);
-
   const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
