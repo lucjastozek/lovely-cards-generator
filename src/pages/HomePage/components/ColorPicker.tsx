@@ -68,6 +68,7 @@ export default function ColorPicker({
           setColor(e.target.value);
           setChosenCol(colors.length);
         }}
+        aria-label="custom color picker"
       />
     </div>
   );

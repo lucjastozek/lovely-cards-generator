@@ -89,6 +89,7 @@ export default function HomePage(): JSX.Element {
             id="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
+            aria-label="author"
           />
         </div>
         <div
@@ -99,6 +100,7 @@ export default function HomePage(): JSX.Element {
             id="recipient"
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
+            aria-label="recipient"
           />
         </div>
         <div
@@ -110,6 +112,7 @@ export default function HomePage(): JSX.Element {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={1}
+            aria-label="message"
           />
         </div>
         <div
