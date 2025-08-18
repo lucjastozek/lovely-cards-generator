@@ -9,7 +9,7 @@ function App() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "100vh",
+        height: "100dvh",
         width: "100vw",
         overflow: "hidden",
       }}
