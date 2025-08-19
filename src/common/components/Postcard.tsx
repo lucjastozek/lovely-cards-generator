@@ -37,6 +37,40 @@ export default function Postcard({
   const [completedDrawings, setCompletedDrawings] = useState<Drawing[]>([]);
   const [currentDrawing, setCurrentDrawing] = useState<Drawing | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFont = async () => {
+      try {
+        if ("fonts" in document) {
+          await document.fonts.ready;
+
+          const extendedLatinText = "ĄąĆćĘęŁłŃńÓóŚśŹźŻż";
+          const basicText = "ABCabc";
+
+          await Promise.all([
+            document.fonts.load(`400 16px 'Comic Relief'`, basicText),
+            document.fonts.load(`700 16px 'Comic Relief'`, basicText),
+            document.fonts.load(`400 16px 'Comic Relief'`, extendedLatinText),
+            document.fonts.load(`700 16px 'Comic Relief'`, extendedLatinText),
+            document.fonts.load(`400 16px 'Comic Neue'`, basicText),
+            document.fonts.load(`700 16px 'Comic Neue'`, basicText),
+            document.fonts.load(`400 16px 'Comic Neue'`, extendedLatinText),
+            document.fonts.load(`700 16px 'Comic Neue'`, extendedLatinText),
+          ]);
+
+          setTimeout(() => setFontLoaded(true), 150);
+        } else {
+          setTimeout(() => setFontLoaded(true), 2500);
+        }
+      } catch {
+        console.warn("Comic fonts failed to load, using fallback");
+        setFontLoaded(true);
+      }
+    };
+
+    loadFont();
+  }, []);
 
   const drawBackgroundCanvas = useCallback(() => {
     const canvas = backgroundCanvasRef.current;
@@ -51,7 +85,6 @@ export default function Postcard({
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    console.log("rysuje tlo");
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, w, h);
 
@@ -62,8 +95,12 @@ export default function Postcard({
     const smallFontSize = baseFontSize * 0.5;
     const padding = Math.min(w, h) * 0.03;
 
+    const fontFamily = fontLoaded
+      ? "'Comic Relief', 'Comic Neue', 'Comic Sans MS', sans-serif"
+      : "'Comic Neue', 'Comic Sans MS', sans-serif";
+
     if (isPortraitCanvas) {
-      ctx.font = `${baseFontSize}px Comic Neue, cursive`;
+      ctx.font = `${baseFontSize}px ${fontFamily}`;
       wrapText(
         ctx,
         message,
@@ -73,11 +110,11 @@ export default function Postcard({
         baseFontSize * 1.2
       );
 
-      ctx.font = `${smallFontSize}px Comic Neue, cursive`;
+      ctx.font = `${smallFontSize}px ${fontFamily}`;
       ctx.fillText(`from: ${author}`, padding, h - smallFontSize * 2);
       ctx.fillText(`to: ${recipient}`, padding, h - padding);
     } else {
-      ctx.font = `${baseFontSize}px Comic Neue, cursive`;
+      ctx.font = `${baseFontSize}px ${fontFamily}`;
       wrapText(
         ctx,
         message,
@@ -87,7 +124,7 @@ export default function Postcard({
         baseFontSize * 1.2
       );
 
-      ctx.font = `${smallFontSize}px Comic Neue, cursive`;
+      ctx.font = `${smallFontSize}px ${fontFamily}`;
       ctx.fillText(`from: ${author}`, padding, h - smallFontSize * 2);
       ctx.fillText(`to: ${recipient}`, padding, h - padding);
     }
@@ -102,6 +139,7 @@ export default function Postcard({
     recipient,
     message,
     completedDrawings,
+    fontLoaded,
   ]);
 
   const drawForegroundCanvas = useCallback(() => {
