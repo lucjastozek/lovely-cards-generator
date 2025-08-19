@@ -31,13 +31,15 @@ export default function Postcard({
   message,
   setFlexDirection,
 }: PostcardProps): JSX.Element {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
+  const foregroundCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [drawings, setDrawings] = useState<Drawing[]>([]);
+  const [completedDrawings, setCompletedDrawings] = useState<Drawing[]>([]);
+  const [currentDrawing, setCurrentDrawing] = useState<Drawing | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const drawCanvas = useCallback(() => {
-    const canvas = canvasRef.current;
+  const drawBackgroundCanvas = useCallback(() => {
+    const canvas = backgroundCanvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
@@ -47,6 +49,9 @@ export default function Postcard({
     const w = rect.width;
     const h = rect.height;
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    console.log("rysuje tlo");
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, w, h);
 
@@ -87,32 +92,68 @@ export default function Postcard({
       ctx.fillText(`to: ${recipient}`, padding, h - padding);
     }
 
-    for (const drawing of drawings) {
+    for (const drawing of completedDrawings) {
       drawPath(ctx, drawing, w);
     }
-  }, [backgroundColor, textColor, author, recipient, message, drawings]);
+  }, [
+    backgroundColor,
+    textColor,
+    author,
+    recipient,
+    message,
+    completedDrawings,
+  ]);
 
-  const updateCanvasSize = useCallback(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const devicePixelRatio = window.devicePixelRatio || 1;
-
-    canvas.width = rect.width * devicePixelRatio;
-    canvas.height = rect.height * devicePixelRatio;
+  const drawForegroundCanvas = useCallback(() => {
+    const canvas = foregroundCanvasRef.current;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+    if (!ctx) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (currentDrawing) {
+      drawPath(ctx, currentDrawing, w);
     }
+  }, [currentDrawing]);
+
+  const updateCanvasSize = useCallback(() => {
+    const backgroundCanvas = backgroundCanvasRef.current;
+    const foregroundCanvas = foregroundCanvasRef.current;
+    const container = containerRef.current;
+    if (!backgroundCanvas || !foregroundCanvas || !container) return;
+
+    const rect = backgroundCanvas.getBoundingClientRect();
+    const devicePixelRatio = window.devicePixelRatio || 1;
+
+    [backgroundCanvas, foregroundCanvas].forEach((canvas) => {
+      canvas.width = rect.width * devicePixelRatio;
+      canvas.height = rect.height * devicePixelRatio;
+
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.scale(devicePixelRatio, devicePixelRatio);
+      }
+    });
 
     const isPortrait = window.innerHeight > window.innerWidth;
     setFlexDirection(isPortrait ? "column" : "row");
 
-    drawCanvas();
-  }, [setFlexDirection, drawCanvas]);
+    drawBackgroundCanvas();
+    const foregroundCtx = foregroundCanvas.getContext("2d");
+    if (foregroundCtx) {
+      foregroundCtx.clearRect(
+        0,
+        0,
+        foregroundCanvas.width,
+        foregroundCanvas.height
+      );
+    }
+  }, [setFlexDirection, drawBackgroundCanvas]);
 
   useEffect(() => {
     updateCanvasSize();
@@ -126,8 +167,12 @@ export default function Postcard({
   }, [updateCanvasSize]);
 
   useEffect(() => {
-    drawCanvas();
-  }, [drawCanvas]);
+    drawBackgroundCanvas();
+  }, [drawBackgroundCanvas]);
+
+  useEffect(() => {
+    drawForegroundCanvas();
+  }, [drawForegroundCanvas]);
 
   const wrapText = (
     ctx: CanvasRenderingContext2D,
@@ -180,7 +225,7 @@ export default function Postcard({
   };
 
   const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
+    const canvas = foregroundCanvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
 
     const rect = canvas.getBoundingClientRect();
@@ -193,40 +238,41 @@ export default function Postcard({
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDrawing(true);
     const pos = getMousePos(e);
-    setDrawings((prev) => [
-      ...prev,
-      {
-        points: [pos],
-        color: brushColor,
-      },
-    ]);
+    setCurrentDrawing({
+      points: [pos],
+      color: brushColor,
+    });
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing) return;
+    if (!isDrawing || !currentDrawing) return;
 
     const pos = getMousePos(e);
-    setDrawings((prev) => [
-      ...prev.slice(0, -1),
-      {
-        color: prev[prev.length - 1].color,
-        points: [...prev[prev.length - 1].points, pos],
-      },
-    ]);
+    setCurrentDrawing({
+      color: currentDrawing.color,
+      points: [...currentDrawing.points, pos],
+    });
   };
 
   const handleMouseUp = () => {
+    if (isDrawing && currentDrawing) {
+      setCompletedDrawings((prev) => [...prev, currentDrawing]);
+      setCurrentDrawing(null);
+    }
     setIsDrawing(false);
   };
 
   const handleMouseLeave = () => {
+    if (isDrawing && currentDrawing) {
+      setCompletedDrawings((prev) => [...prev, currentDrawing]);
+      setCurrentDrawing(null);
+    }
     setIsDrawing(false);
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
     const touch = e.touches[0];
-    const canvas = canvasRef.current;
+    const canvas = foregroundCanvasRef.current;
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
@@ -236,21 +282,17 @@ export default function Postcard({
     };
 
     setIsDrawing(true);
-    setDrawings((prev) => [
-      ...prev,
-      {
-        points: [pos],
-        color: brushColor,
-      },
-    ]);
+    setCurrentDrawing({
+      points: [pos],
+      color: brushColor,
+    });
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    if (!isDrawing) return;
+    if (!isDrawing || !currentDrawing) return;
 
     const touch = e.touches[0];
-    const canvas = canvasRef.current;
+    const canvas = foregroundCanvasRef.current;
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
@@ -259,17 +301,18 @@ export default function Postcard({
       y: touch.clientY - rect.top,
     };
 
-    setDrawings((prev) => [
-      ...prev.slice(0, -1),
-      {
-        color: prev[prev.length - 1].color,
-        points: [...prev[prev.length - 1].points, pos],
-      },
-    ]);
+    setCurrentDrawing({
+      color: currentDrawing.color,
+      points: [...currentDrawing.points, pos],
+    });
   };
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
+    if (isDrawing && currentDrawing) {
+      setCompletedDrawings((prev) => [...prev, currentDrawing]);
+      setCurrentDrawing(null);
+    }
     setIsDrawing(false);
   };
 
@@ -282,7 +325,7 @@ export default function Postcard({
   };
 
   const downloadCard = () => {
-    const canvas = canvasRef.current;
+    const canvas = backgroundCanvasRef.current;
     if (!canvas) return;
 
     const link = document.createElement("a");
@@ -292,7 +335,8 @@ export default function Postcard({
   };
 
   const clearDrawing = () => {
-    setDrawings([]);
+    setCompletedDrawings([]);
+    setCurrentDrawing(null);
   };
 
   return (
@@ -301,17 +345,23 @@ export default function Postcard({
       className="postcard-container"
       id="postcard-container"
     >
-      <canvas
-        ref={canvasRef}
-        className="postcard-canvas"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      />
+      <div className="canvas-wrapper">
+        <canvas
+          ref={backgroundCanvasRef}
+          className="postcard-canvas postcard-canvas--background"
+        />
+        <canvas
+          ref={foregroundCanvasRef}
+          className="postcard-canvas postcard-canvas--foreground"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        />
+      </div>
       <div className="postcard-controls">
         <button
           className="postcard-button postcard-button--download"
