@@ -22,7 +22,7 @@ export default function ColorPicker({
   };
 
   const [chosenIndex, setChosenIndex] = useState(
-    colors.findIndex((color) => color === selectedColor)
+    colors.findIndex((color) => color === selectedColor),
   );
 
   const isCustomSelected = chosenIndex === -1;

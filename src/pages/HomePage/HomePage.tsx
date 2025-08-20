@@ -49,7 +49,7 @@ export default function HomePage(): JSX.Element {
   };
 
   const [backgroundColor, setBackgroundColor] = useState(
-    Object.values(darkPalette)[0]
+    Object.values(darkPalette)[0],
   );
   const [textColor, setTextColor] = useState(Object.values(lightPalette)[0]);
   const [author, setAuthor] = useState("me");
