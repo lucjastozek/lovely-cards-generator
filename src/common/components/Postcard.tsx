@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import "./Postcard.css";
-import { DocumentDownload, Eraser } from "iconsax-reactjs";
+import { DocumentDownload, Eraser, Back, ArrowForward } from "iconsax-reactjs";
 
 interface PostcardProps {
   backgroundColor: string;
@@ -38,6 +38,8 @@ export default function Postcard({
   const [currentDrawing, setCurrentDrawing] = useState<Drawing | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [drawingHistory, setDrawingHistory] = useState<Drawing[][]>([[]]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -294,7 +296,9 @@ export default function Postcard({
 
   const handleMouseUp = () => {
     if (isDrawing && currentDrawing) {
-      setCompletedDrawings((prev) => [...prev, currentDrawing]);
+      const newDrawings = [...completedDrawings, currentDrawing];
+      setCompletedDrawings(newDrawings);
+      saveToHistory(newDrawings);
       setCurrentDrawing(null);
     }
     setIsDrawing(false);
@@ -302,7 +306,9 @@ export default function Postcard({
 
   const handleMouseLeave = () => {
     if (isDrawing && currentDrawing) {
-      setCompletedDrawings((prev) => [...prev, currentDrawing]);
+      const newDrawings = [...completedDrawings, currentDrawing];
+      setCompletedDrawings(newDrawings);
+      saveToHistory(newDrawings);
       setCurrentDrawing(null);
     }
     setIsDrawing(false);
@@ -348,7 +354,9 @@ export default function Postcard({
   const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     if (isDrawing && currentDrawing) {
-      setCompletedDrawings((prev) => [...prev, currentDrawing]);
+      const newDrawings = [...completedDrawings, currentDrawing];
+      setCompletedDrawings(newDrawings);
+      saveToHistory(newDrawings);
       setCurrentDrawing(null);
     }
     setIsDrawing(false);
@@ -361,6 +369,32 @@ export default function Postcard({
       .replace(/[:/, ]/g, "-")
       .slice(0, -3);
   };
+
+  const saveToHistory = (drawings: Drawing[]) => {
+    const newHistory = drawingHistory.slice(0, historyIndex + 1);
+    newHistory.push([...drawings]);
+    setDrawingHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  const undo = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setCompletedDrawings([...drawingHistory[newIndex]]);
+    }
+  };
+
+  const redo = () => {
+    if (historyIndex < drawingHistory.length - 1) {
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setCompletedDrawings([...drawingHistory[newIndex]]);
+    }
+  };
+
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < drawingHistory.length - 1;
 
   const downloadCard = () => {
     const canvas = backgroundCanvasRef.current;
@@ -375,6 +409,7 @@ export default function Postcard({
   const clearDrawing = () => {
     setCompletedDrawings([]);
     setCurrentDrawing(null);
+    saveToHistory([]);
   };
 
   return (
@@ -402,18 +437,34 @@ export default function Postcard({
       </div>
       <div className="postcard-controls">
         <button
+          className="postcard-button postcard-button--undo"
+          onClick={undo}
+          disabled={!canUndo}
+          aria-label="undo"
+        >
+          <Back color="var(--font)" className="icon" />
+        </button>
+        <button
+          className="postcard-button postcard-button--redo"
+          onClick={redo}
+          disabled={!canRedo}
+          aria-label="redo"
+        >
+          <ArrowForward color="var(--font)" className="icon" />
+        </button>
+        <button
           className="postcard-button postcard-button--download"
           onClick={downloadCard}
         >
           Download
-          <DocumentDownload color="var(--font)" />
+          <DocumentDownload color="var(--font)" className="icon" />
         </button>
         <button
           className="postcard-button postcard-button--clear"
           onClick={clearDrawing}
         >
           Clear
-          <Eraser color="var(--font)" />
+          <Eraser color="var(--font)" className="icon" />
         </button>
       </div>
     </div>
