@@ -109,7 +109,7 @@ export default function Postcard({
         padding,
         baseFontSize + padding,
         w - 2 * padding,
-        baseFontSize * 1.2
+        baseFontSize * 1.2,
       );
 
       ctx.font = `${smallFontSize}px ${fontFamily}`;
@@ -123,7 +123,7 @@ export default function Postcard({
         padding,
         baseFontSize + padding,
         w - 2 * padding,
-        baseFontSize * 1.2
+        baseFontSize * 1.2,
       );
 
       ctx.font = `${smallFontSize}px ${fontFamily}`;
@@ -190,7 +190,7 @@ export default function Postcard({
         0,
         0,
         foregroundCanvas.width,
-        foregroundCanvas.height
+        foregroundCanvas.height,
       );
     }
   }, [setFlexDirection, drawBackgroundCanvas]);
@@ -220,7 +220,7 @@ export default function Postcard({
     x: number,
     y: number,
     maxWidth: number,
-    lineHeight: number
+    lineHeight: number,
   ) => {
     const words = text.split(" ");
     let line = "";
@@ -245,7 +245,7 @@ export default function Postcard({
   const drawPath = (
     ctx: CanvasRenderingContext2D,
     drawing: Drawing,
-    canvasWidth: number
+    canvasWidth: number,
   ) => {
     if (drawing.points.length < 2) return;
 

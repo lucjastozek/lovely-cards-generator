@@ -1,11 +1,12 @@
 export default function LogoType(): JSX.Element {
   return (
     <div style={{ display: "flex", gap: "1rem" }}>
-      <h2
+      <h1
         style={{
           marginBottom: "0.27em",
           marginTop: "0",
           fontFamily: "'Pacifico', cursive",
+          fontSize: "1.5rem",
         }}
       >
         <a
@@ -20,7 +21,7 @@ export default function LogoType(): JSX.Element {
           Lovely Cards{" "}
           <img src="/lovelyCardsIcon.svg" alt="Lovely Cards logo" />
         </a>
-      </h2>
+      </h1>
     </div>
   );
 }
