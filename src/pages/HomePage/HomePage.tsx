@@ -92,10 +92,10 @@ export default function HomePage(): JSX.Element {
         className={`controls-panel ${isPortrait && isMoreOptionsOpen ? "expanded" : ""}`}
       >
         <div className="control-group">
-          <h3 data-control="brush">
+          <h2 data-control="brush">
             <Brush2 color="var(--font)" />
             Brush color
-          </h3>
+          </h2>
           <ColorPicker
             setColor={setBrushColor}
             selectedColor={brushColor}
@@ -119,10 +119,10 @@ export default function HomePage(): JSX.Element {
           <div className="color-controls-row">
             <div className="color-control-item">
               <div className="control-group">
-                <h3 data-control="background">
+                <h2 data-control="background">
                   <PictureFrame color="var(--font)" />
                   Background color
-                </h3>
+                </h2>
                 <ColorPicker
                   setColor={setBackgroundColor}
                   selectedColor={backgroundColor}
@@ -132,10 +132,10 @@ export default function HomePage(): JSX.Element {
             </div>
             <div className="color-control-item">
               <div className="control-group">
-                <h3 data-control="text">
+                <h2 data-control="text">
                   <Text color="var(--font)" />
                   Text color
-                </h3>
+                </h2>
                 <ColorPicker
                   setColor={setTextColor}
                   selectedColor={textColor}
@@ -146,10 +146,10 @@ export default function HomePage(): JSX.Element {
           </div>
 
           <div className="control-group">
-            <h3 data-control="author">
+            <h2 data-control="author">
               <User color="var(--font)" />
               Author
-            </h3>
+            </h2>
             <input
               id="author"
               className="enhanced-input"
@@ -161,10 +161,10 @@ export default function HomePage(): JSX.Element {
           </div>
 
           <div className="control-group">
-            <h3 data-control="recipient">
+            <h2 data-control="recipient">
               <Lovely color="var(--font)" />
               Recipient
-            </h3>
+            </h2>
             <input
               id="recipient"
               className="enhanced-input"
@@ -176,10 +176,10 @@ export default function HomePage(): JSX.Element {
           </div>
 
           <div className="control-group">
-            <h3 data-control="message">
+            <h2 data-control="message">
               <MessageFavorite color="var(--font)" />
               Message
-            </h3>
+            </h2>
             <textarea
               id="message"
               className="enhanced-input enhanced-textarea"
